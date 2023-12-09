@@ -42,16 +42,28 @@ class Train{
 
     private var vanVolumes = mutableListOf<Int>()
 
-    fun add_rus_endings(input: Int):String
+    fun add_rus_endings(input: Int, type: String):String
     {
-        if (input%100 in (11..14)) return "ов"
-        return when (input%10) {
-            1 -> ""
-            in (2..4) -> "а"
-            in (5..9) -> "ов"
-            0 -> "ов"
-            else -> ""
+        if (type == "ИП"){
+            if (input%100 in (11..14)) return "ов"
+            return when (input%10) {
+                1 -> ""
+                in (2..4) -> "а"
+                in (5..9) -> "ов"
+                0 -> "ов"
+                else -> ""
+            }
         }
+        if (type == "РП"){
+            if (input%100 in (11..14)) return "ов"
+            return when (input%10) {
+                1 -> "а"
+                in (2..9) -> "ов"
+                0 -> "ов"
+                else -> ""
+            }
+        }
+        return ""
     }
 
     fun route(){
@@ -67,7 +79,7 @@ class Train{
     fun sell_tickets(){
         println("Шаг 2: (Продажа билетов)")
         ticketCount = Random.nextInt(5, 201)
-        println("Было куплено $ticketCount билет${add_rus_endings(ticketCount)}\n")
+        println("Было куплено $ticketCount билет${add_rus_endings(ticketCount, "ИП")}\n")
     }
 
     fun form_train(){
@@ -79,16 +91,15 @@ class Train{
             sum += vanVolumes.last()
         }
 
-        println("(${vanVolumes.count()} вагон${add_rus_endings(vanVolumes.count())})\n")
+        println("(${vanVolumes.count()} вагон${add_rus_endings(vanVolumes.count(), "ИП")})\n")
     }
 
     fun output(){
-        println("Поезд $begin - $end, состоящий из ${vanVolumes.count()} вагон${add_rus_endings(vanVolumes.count())} был отправлен")
+        println("Поезд $begin - $end, состоящий из ${vanVolumes.count()} вагон${add_rus_endings(vanVolumes.count(), "РП")} был отправлен")
         for (i in vanVolumes.indices){
             println("Вместимость вагона ${i + 1}: ${vanVolumes[i]}")
             ticketCount -= vanVolumes[i]
         }
-        println("В последнем вагоне ${vanVolumes.last() - abs(ticketCount)} человек(а)\n")
     }
 }
 
